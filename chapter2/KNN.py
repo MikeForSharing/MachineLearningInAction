@@ -39,3 +39,14 @@ def file2matrix(fileName):
 		index += 1
 
 	return returnMat, classLabels
+
+
+def autoNorm(dataSet):
+	maxValue = dataSet.max(0)
+	minValue = dataSet.min(0)
+	rangeValue = maxValue - minValue
+	NorMat = zeros(shape(dataSet))
+	m = dataSet.shape[0]
+	NorMat = dataSet - tile(minValue,(m,1))
+	NorMat = NorMat/tile(rangeValue, (m,1) )
+	return NorMat, rangeValue, minValue
