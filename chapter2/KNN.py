@@ -78,3 +78,44 @@ def classifyPerson():
 	itemArr = [ffMiles, percentGames, iceLitre]
 	classifyResult = classify0((itemArr-minVal)/rangeVal, norMat, datingLabels, 3)
 	print "the level you will like this persion is %s" %(classifyResult)
+
+
+
+
+def img2vector(filename):
+	returnVect = zeros((1,1024))
+	fr = open(filename)
+	for i in range(32):
+		line = fr.readline()
+		for j in range(32):
+			returnVect[0, 32*i+j] = line[j]
+	return returnVect
+
+
+from os import listdir
+
+def handWriteTest():
+	hwLabels = []
+	traingFileList = listdir('trainingDigits')
+	trainFileCount = len(traingFileList)
+	trainingMat = zeros((trainFileCount,1024))
+	for i in range(trainFileCount):
+		fileNameStr = traingFileList[i]
+		fileStr = fileNameStr.split('.')[0]
+		classNumStr = int(fileStr.split('_')[0])
+		hwLabels.append(classNumStr)
+		trainingMat[i,:] = img2vector('trainingDigits/%s' %fileNameStr)
+	testFileList = listdir('testDigits')
+	errorCount = 0.0
+	testFileCount = len(testFileList)
+	for i in range(testFileCount):
+		fileNameStr = testFileList[i]
+		fileStr = fileNameStr.split('.')[0]
+		classNumStr = int(fileStr.split('_')[0])
+		testVector = img2vector('testDigits/%s' %fileNameStr)
+		classifyResult = classify0(testVector,trainingMat,hwLabels,3)
+		print "the classifier came back with : %d, the real classify is: %d" % (classifyResult,classNumStr)
+		if(classifyResult != classNumStr):
+			errorCount += 1.0
+	print "the total number of errors is %d " %errorCount
+	print "the error rate is %f" % (errorCount/float(testFileCount)) 
