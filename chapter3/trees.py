@@ -15,6 +15,16 @@ def calcShannonEnt(dataSet):
     return shannonEnt
 
 def createDataSet():
-    dataSet = [[1,1,'yes'],[1,1,'yes'],[0,1,'no'],[1,0,'no']]
+    dataSet = [[1,1,'yes'],[1,1,'yes'],[0,1,'no'],[1,0,'no'],[0,1,'no']]
     labels = ['no surfacing','flippers']
     return dataSet, labels
+
+
+def splitDataSet(dataSet, axis, value):
+    retDataSet = []
+    for firstDim in dataSet:
+        if firstDim[axis] == value:
+            reduceFirstDim = firstDim[:axis]
+            reduceFirstDim.extend(firstDim[axis+1:])
+            retDataSet.append(reduceFirstDim)
+    return retDataSet
